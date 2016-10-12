@@ -1,10 +1,23 @@
+import { createStore, applyMiddleware } from 'redux';
+import createSocketIoMiddleware from 'redux-socket.io';
 import io from 'socket.io-client';
-const socket = io();
 
-socket.on('connect', function(){
-  console.log("client connected");
-  socket.emit('client-message', 'test client message');
+let socket = io();
+let socketIoMiddleware = createSocketIoMiddleware(socket, 'server/');
+
+function reducer(state = {}, action){
+  switch(action.type) {
+    case 'message':
+      return Object.assign({}, { message: action.data });
+    default:
+      return state;
+  }
+}
+
+let store = applyMiddleware(socketIoMiddleware)(createStore)(reducer);
+
+store.subscribe(() => {
+  console.log('new client state', store.getState());
 });
 
-socket.on('event', function(data){});
-socket.on('disconnect', function(){});
+store.dispatch({ type: 'server/hello', data: 'Hello!' });
