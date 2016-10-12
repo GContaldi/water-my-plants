@@ -7,8 +7,8 @@ let socketIoMiddleware = createSocketIoMiddleware(socket, 'server/');
 
 function reducer(state = {}, action){
   switch(action.type) {
-    case 'message':
-      return Object.assign({}, { message: action.data });
+    case 'newRead':
+      return Object.assign({}, { newRead: action.data });
     default:
       return state;
   }
@@ -17,7 +17,10 @@ function reducer(state = {}, action){
 let store = applyMiddleware(socketIoMiddleware)(createStore)(reducer);
 
 store.subscribe(() => {
-  console.log('new client state', store.getState());
+  console.log('new client state', JSON.stringify(store.getState()));
 });
 
-store.dispatch({ type: 'server/hello', data: 'Hello!' });
+setTimeout(() => {
+  console.log('sending action');
+  store.dispatch({ type: 'server/command', data: { object: 'pump', value: 'on' } });
+}, 2000);
