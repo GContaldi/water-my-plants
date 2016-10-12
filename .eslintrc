@@ -1,0 +1,47 @@
+{
+  "extends": "airbnb",
+  "globals": {},
+  "rules": {
+    // Can be automatically transformed everywhere with `eslint --fix`
+    "space-before-function-paren": [2, "never"],
+
+    // in contrast to the old lint configuration, enforce the absence of dangling commas
+    "comma-dangle": [2, "never"],
+
+    // allow unnamed anonymous functions
+    "func-names": 0,
+
+    // the airbnb toolchain presupposes concatenation and prepending 'use strict'
+    "strict": 0,
+
+    // deactivate enforced indentation, activate at own peril
+    "indent": [0, 2, {"SwitchCase": 1}],
+
+    // allows for placeholder/unused variables that look like: _, __, ___
+    "no-unused-vars": [2, { "vars": "local", "varsIgnorePattern": "^_{1,3}$", "args": "after-used" }],
+
+    // allows us to sort functions and classes in a logical order, rather than the inverse inclusion order
+    "no-use-before-define": 1,
+
+    // allows to assign to argument properties, but not to arguments
+    "no-param-reassign": [2, {"props": false}],
+
+    // allow function values, because some objects don't have methods, they are a collection of functions
+    "object-shorthand": 0,
+
+    // would require fat-arrow function definitions even if there is no result -> e.g. in tests `it`
+    "prefer-arrow-callback": 0,
+
+    // deactivate, because we want to allow for () => { return {}; } in favour of () => ({})
+    "arrow-body-style": 0,
+
+    // for a simple string + value, some of us prefer non-template strings. So enforce on a project-by-project basis
+    "prefer-template": 0,
+
+    // Go for a max-len, but set the default higher. Teams may switch the default at their own peril
+    "max-len": [2, 120],
+
+    // Enforces single parenthesis around arrow-function parameter lists, independent of parameter count
+    "arrow-parens": [2, "always"]
+  }
+}
