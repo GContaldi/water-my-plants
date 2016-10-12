@@ -17,13 +17,13 @@ var objectsState = [
 
 function sendState(socket, objectsState) {
   objectsState.forEach(function(objectState) {
-    socket.emit('action', { type: 'newRead', data: objectState });
+    socket.emit('action', { type: 'NEW_READ', data: objectState });
   });
 }
 
 function actionHandler(socket, action) {
   switch(action.type) {
-    case 'server/command':
+    case 'server/COMMAND':
       console.log('Got a command!', action.data);
       objectsState = updateState(objectsState, action.data);
       sendState(socket, objectsState);
@@ -56,5 +56,5 @@ io.on('connection', function(socket) {
 });
 
 http.listen(3000, function() {
-  console.log('listening on *:3000');
+  console.log('listening on http://localhost:3000');
 });

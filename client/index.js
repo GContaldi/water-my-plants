@@ -1,26 +1,16 @@
-import { createStore, applyMiddleware } from 'redux';
-import createSocketIoMiddleware from 'redux-socket.io';
-import io from 'socket.io-client';
-
-let socket = io();
-let socketIoMiddleware = createSocketIoMiddleware(socket, 'server/');
-
-function reducer(state = {}, action){
-  switch(action.type) {
-    case 'newRead':
-      return Object.assign({}, { newRead: action.data });
-    default:
-      return state;
-  }
-}
-
-let store = applyMiddleware(socketIoMiddleware)(createStore)(reducer);
+import React from 'react';
+import { render } from 'react-dom';
+import { Provider } from 'react-redux';
+import store from './store';
+import App from './components/App';
 
 store.subscribe(() => {
-  console.log('new client state', JSON.stringify(store.getState()));
+  console.log('new state', JSON.stringify(store.getState()));
 });
 
-setTimeout(() => {
-  console.log('sending action');
-  store.dispatch({ type: 'server/command', data: { object: 'pump', value: 'on' } });
-}, 2000);
+render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root')
+);

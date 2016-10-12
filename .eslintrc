@@ -42,6 +42,10 @@
     "max-len": [2, 120],
 
     // Enforces single parenthesis around arrow-function parameter lists, independent of parameter count
-    "arrow-parens": [2, "always"]
+    "arrow-parens": [2, "always"],
+
+    // Enforce stateless React Components to be written as a pure function
+    "react/prefer-stateless-function": "off"
+
   }
 }
