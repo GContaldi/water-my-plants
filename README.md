@@ -26,7 +26,9 @@ This project is based on Arduino YUN
 ### Getting Start
 1. Download [Arduino IDE](https://www.arduino.cc/en/Main/Software) based on your OS
 2. Open Arduino YUN and set Arduino YUN as a board (Boards->Arduino Yun)
-3. Import PubSubClient library: Sketch->Include Library->Manage Libraries
+3. For OSx copy the folder __arduino-client/mqtt_lib__ inside /Users/your_user/Documents/Arduino/libraries/
+4. Open 
 
 ### Helpful Links 
+* [Import Libraries](https://www.arduino.cc/en/Guide/Libraries)
 * [Getting start with Arduino YUN](http://wiki.linino.org/doku.php?id=wiki:basicconfiguration)
