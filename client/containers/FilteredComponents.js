@@ -1,10 +1,5 @@
-import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import Components from '../components/Components'
-
-const propTypes = {
-  componentsType: PropTypes.string.isRequired
-};
+import Components from '../components/Components';
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -12,7 +7,7 @@ const mapStateToProps = (state, ownProps) => {
       return component.type === ownProps.componentsType;
     }),
     componentsType: ownProps.componentsType
-  }
-}
+  };
+};
 
 export default connect(mapStateToProps)(Components);
