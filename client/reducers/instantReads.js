@@ -1,36 +1,36 @@
 import _ from 'underscore';
 
-const objectPresent = (state = [], data) => {
-  return _.some(state, function(e) { return e.object === data.object; });
+const isComponentPresent = (components = [], data) => {
+  return _.some(components, (component) => { return component.name === data.name; });
 };
 
-const addRead = (reads = [], newRead) => {
+const addComponent = (components = [], newComponent) => {
   return [
-    ...reads,
-    newRead
+    ...components,
+    newComponent
   ];
 };
 
-const updateRead = (state = {}, data) => {
-  if (state.object !== data.object) {
-    return state;
+const updateComponent = (component = {}, data) => {
+  if (component.name === data.name) {
+    return Object.assign({}, component, { value: data.value });
   }
-  return data;
+  return component;
 };
 
-const updateReads = (state = [], data) => {
-  return state.map((o) => updateRead(o, data));
+const updateComponents = (components = [], data) => {
+  return components.map((component) => updateComponent(component, data));
 };
 
-const instantReads = (state = [], action) => {
+const instantReads = (components = [], action) => {
   switch (action.type) {
     case 'NEW_READ':
-      return objectPresent(state, action.data) ?
-        updateReads(state, action.data) :
-        addRead(state, action.data);
+      return isComponentPresent(components, action.data) ?
+        updateComponents(components, action.data) :
+        addComponent(components, action.data);
 
     default:
-      return state;
+      return components;
   }
 };
 

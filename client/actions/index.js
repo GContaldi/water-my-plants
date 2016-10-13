@@ -1,6 +1,8 @@
+import componentGenerator from '../../lib/componentGenerator';
+
 export const pumpAction = (action) => {
   return {
     type: 'server/COMMAND',
-    data: { object: 'pump', value: action }
+    data: componentGenerator('pump', 'actuator', action)
   };
 };
