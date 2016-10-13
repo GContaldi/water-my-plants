@@ -1,11 +1,12 @@
 import React from 'react';
-import TurnPumpOn from '../containers/TurnPumpOn';
+import Pump from '../containers/Pump';
 
 class App extends React.Component {
   render() {
     return (
       <div>
-        <TurnPumpOn />
+        <Pump action="on" />
+        <Pump action="off" />
       </div>
     );
   }

@@ -1,16 +1,17 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { turnPumpOn } from '../actions';
+import { pumpAction } from '../actions';
 
 const propTypes = {
-  dispatch: PropTypes.func.isRequired
+  dispatch: PropTypes.func.isRequired,
+  action: PropTypes.string.isRequired
 };
 
-class TurnPumpOn extends React.Component {
+class Pump extends React.Component {
   static get propTypes() { return propTypes; }
 
   handleClick() {
-    this.props.dispatch(turnPumpOn());
+    this.props.dispatch(pumpAction(this.props.action));
   }
 
   render() {
@@ -19,11 +20,11 @@ class TurnPumpOn extends React.Component {
     return (
       <div>
         <button onClick={onButtonClick}>
-          Turn Pump On
+          {`Turn pump ${this.props.action}`}
         </button>
       </div>
     );
   }
 }
 
-export default connect()(TurnPumpOn);
+export default connect()(Pump);

@@ -1,6 +1,6 @@
-export const turnPumpOn = () => {
+export const pumpAction = (action) => {
   return {
     type: 'server/COMMAND',
-    data: { object: 'pump', value: 'on' }
+    data: { object: 'pump', value: action }
   };
 };
