@@ -5,3 +5,8 @@ mongodb:
     - 27017:27017
   volumes:
     - './data:/data/db'
+mqtt:
+  image: toke/mosquitto
+  hostname: mosquitto
+  ports:
+    - 1883:1883
