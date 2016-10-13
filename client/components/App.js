@@ -1,14 +1,24 @@
 import React from 'react';
-import FilteredComponents from '../containers/FilteredComponents';
-import Pump from '../containers/Pump';
+import { Link } from 'react-router';
+
+const propTypes = {
+  children: React.PropTypes.element.isRequired
+};
 
 class App extends React.Component {
+  static get propTypes() { return propTypes; }
+
   render() {
     return (
       <div>
-        <FilteredComponents componentsType="actuator" />
-        <Pump action="on" />
-        <Pump action="off" />
+        <header>
+          Links:
+          {' '}
+          <Link to="/">Current Status</Link>
+          {' '}
+          <Link to="/history">History</Link>
+        </header>
+        <div style={{ marginTop: '1.5em' }}>{this.props.children}</div>
       </div>
     );
   }
