@@ -4,9 +4,11 @@ mongodb:
   ports:
     - 27017:27017
   volumes:
-    - './data:/data/db'
+    - './data/mongodb:/data/db'
 mqtt:
   image: toke/mosquitto
   hostname: mosquitto
   ports:
     - 1883:1883
+  volumes:
+    - './data/mqtt:/mqtt/data'
