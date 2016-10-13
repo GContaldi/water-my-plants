@@ -1,0 +1,7 @@
+mongodb:
+  image: mongo:3.3
+  hostname: mongodb
+  ports:
+    - 27017:27017
+  volumes:
+    - './data:/data/db'

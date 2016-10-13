@@ -23,7 +23,7 @@ class Components extends React.Component {
           }
         </div>
       </div>
-    )
+    );
   }
 }
 

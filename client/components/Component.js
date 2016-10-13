@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 
 const propTypes = {
   name: React.PropTypes.string.isRequired,
