@@ -45,7 +45,6 @@ io.on('connection', function(socket) {
   sendComponentsData(socket);
 
   socket.on('action', (action) => {
-    console.log("action", action.type);
     actionHandler(socket, action);
     sendComponentsData(socket);
   });
