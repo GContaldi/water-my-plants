@@ -18,15 +18,25 @@ const getDocuments = () => {
   return dbInstance ? [] : dbInstance.collection('documents');
 };
 
-const insertDocuments = (data) => {
+const insertDocuments = (collection, data) => {
   return new Promise((resolve, reject) => {
-    const documents = getDocuments();
+    const documentType = dbInstance.collection(collection);
 
-    if (documents === null) {
-      reject('no documents');
-    }
+    documentType.insertMany(data, (err, result) => {
+      if (err === null) {
+        resolve(result);
+      } else {
+        reject(err);
+      }
+    });
+  });
+};
 
-    documents.insertMany(data, (err, result) => {
+const insertDocument = (collection, data) => {
+  return new Promise((resolve, reject) => {
+    const documentType = dbInstance.collection(collection);
+
+    documentType.insert(data, (err, result) => {
       if (err === null) {
         resolve(result);
       } else {
@@ -54,4 +64,4 @@ const findDocuments = (data) => {
   });
 };
 
-export default { getDocuments, insertDocuments, findDocuments };
+export default { getDocuments, insertDocument, insertDocuments, findDocuments };
