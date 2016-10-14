@@ -27,7 +27,7 @@ const updateComponents = (components = [], data) => {
   return components.map((component) => updateComponent(component, data));
 };
 
-const instantReads = (components = [{ blockId: 1, param: 'humidity', value: 100 }], action) => {
+const instantReads = (components = [], action) => {
   switch (action.type) {
     case 'NEW_READ':
       return isComponentPresent(components, action.data) ?

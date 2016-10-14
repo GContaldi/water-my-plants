@@ -16,7 +16,7 @@ class App extends React.Component {
           {' '}
           <Link to="/">Current Status</Link>
           {' '}
-          <Link to="/history">History</Link>
+          <Link to="/dashboard">Dashboard</Link>
         </header>
         <div style={{ marginTop: '1.5em' }}>{this.props.children}</div>
       </div>
