@@ -12,8 +12,8 @@ int pumpDigitalPin = 13;
 void setup() {
   Bridge.begin();
   Serial.begin(9600);
-  client.begin("192.168.0.102", 1883, net);
-
+  client.begin("192.168.240.234", 1883, net);
+  digitalWrite(pumpDigitalPin, HIGH);
   connect();
 }
 
@@ -57,11 +57,11 @@ void messageReceived(String topic, String payload, char * bytes, unsigned int le
     Serial.print(topic);
     Serial.print(" value: ");
     Serial.println(payload);
-    if( payload == "ON") {
+    if( payload == "OFF") {
       Serial.println("Turning ON the PUMP");
       digitalWrite(pumpDigitalPin, HIGH);
     }
-    if( payload == "OFF") {
+    if( payload == "ON") {
       Serial.println("Turning OFF the PUMP");
       digitalWrite(pumpDigitalPin, LOW);
     }
