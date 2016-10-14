@@ -1,5 +1,10 @@
 #include <Arduino.h>
 
+#include <Bridge.h>
+#include <BridgeClient.h>
+#include <MQTTClient.h>
+#include <ArduinoJson.h>
+
 #include <MoistureSensor.h>
 
 // TYPES
@@ -29,20 +34,35 @@ void init_interface() {
 // VARS
 int moisture_level;
 int moisture_threshold = 700;
-// VARS
+
+BridgeClient net;
+MQTTClient client;
 
 MoistureSensor sensor(A0);
 
-void blink() {
-  digitalWrite(LED_PIN, HIGH);
-  delay(BLINK_DELAY / 2);
-  digitalWrite(LED_PIN, LOW);
-  delay(BLINK_DELAY / 2);
+StaticJsonBuffer<200> jsonBuffer;
+
+// VARS
+
+// UITLS
+String createBlockMessage(int blockId, String param, int value) {
+  String message = "{\"blockId\":\"";
+  message += blockId;
+  message += "\",\"param\":\"";
+  message += param;
+  message += "\",\"value\":\"";
+  message += value;
+  message += "\"}";
+  return message;
 }
+// UTILS
 
 void readSensor() {
   moisture_level = sensor.getSmoothedReading();
-  Serial.println("LEVEL: " + String(moisture_level));
+
+  String blockMessageOut = createBlockMessage(1, "humidity", moisture_level);
+  Serial.println(blockMessageOut);
+  client.publish("arduino/out", blockMessageOut);
 }
 
 void setPumpState(PUMP_STATES state) {
@@ -54,18 +74,57 @@ void updateActuators() {
   setPumpState(state);
 }
 
+void connect() {
+  Serial.print("connecting...");
+  while (!client.connect("arduino", "try", "try")) {
+    Serial.print(".");
+    delay(1000);
+  }
+  Serial.println("\nconnected!");
+  client.subscribe("arduino/in");
+}
+
+void updateSettings(JsonObject& message) {
+  const String param = message["param"];
+  const String value = message["value"];
+
+  Serial.println(param);
+
+  if (param == "humidity/threshold") {
+    Serial.println("Set threshold to " + value);
+    Serial.println(value.toInt());
+    moisture_threshold = value.toInt();
+  }
+}
+
+void messageReceived(String topic, String payload, char * bytes, unsigned int length) {
+  if (topic == "arduino/in") {
+    JsonObject& received = jsonBuffer.parseObject(payload);
+    updateSettings(received);
+  }
+}
+
 void setup() {
   Serial.begin(9600);
   Serial.println("Arduino Node Started");
 
   init_interface();
+
+  Bridge.begin();
+  client.begin("192.168.1.188", 1883, net);
+  connect();
 }
 
 void loop() {
+  // protect from disconnect
+  if(!client.connected()) {
+    connect();
+  }
+
+  client.loop();
+
   readSensor();
   updateActuators();
-  // String plant_condition = getPlantCondition();
 
   delay(1000);
-  // blink();
 }
