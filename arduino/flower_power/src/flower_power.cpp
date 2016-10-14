@@ -2,7 +2,7 @@
 
 #include <Bridge.h>
 #include <BridgeClient.h>
-#include <MQTTClient.h>
+#include <PubSubClient.h>
 #include <ArduinoJson.h>
 
 #include <MoistureSensor.h>
@@ -15,7 +15,8 @@ enum PUMP_STATES {
 // TYPES
 
 // CONSTANTS
-int BLINK_DELAY = 1 * 1000;
+const int BLINK_DELAY = 1 * 1000;
+const char* MQTT_IP = "192.168.1.187";
 // CONSTANTS
 
 // INTERFACE
@@ -36,7 +37,7 @@ int moisture_level;
 int moisture_threshold = 700;
 
 BridgeClient net;
-MQTTClient client;
+PubSubClient client(net);
 
 MoistureSensor sensor(A0);
 
@@ -62,7 +63,8 @@ void readSensor() {
 
   String blockMessageOut = createBlockMessage(1, "humidity", moisture_level);
   Serial.println(blockMessageOut);
-  client.publish("arduino/out", blockMessageOut);
+
+  client.publish("arduino/out", blockMessageOut.c_str());
 }
 
 void setPumpState(PUMP_STATES state) {
@@ -74,14 +76,23 @@ void updateActuators() {
   setPumpState(state);
 }
 
-void connect() {
-  Serial.print("connecting...");
-  while (!client.connect("arduino", "try", "try")) {
-    Serial.print(".");
-    delay(1000);
+void reconnect() {
+  // Loop until we're reconnected
+  while (!client.connected()) {
+    Serial.print("Attempting MQTT connection...");
+    // Attempt to connect
+    if (client.connect("arduinoClient")) {
+      Serial.println("connected");
+      // ... and resubscribe
+      client.subscribe("arduino/in");
+    } else {
+      Serial.print("failed, rc=");
+      Serial.print(client.state());
+      Serial.println(" try again in 5 seconds");
+      // Wait 5 seconds before retrying
+      delay(5000);
+    }
   }
-  Serial.println("\nconnected!");
-  client.subscribe("arduino/in");
 }
 
 void updateSettings(JsonObject& message) {
@@ -97,9 +108,11 @@ void updateSettings(JsonObject& message) {
   }
 }
 
-void messageReceived(String topic, String payload, char * bytes, unsigned int length) {
+void messageReceived(char* topic, byte* payload, unsigned int length) {
+  Serial.println(topic);
+  Serial.println("MESSAGE!");
   if (topic == "arduino/in") {
-    JsonObject& received = jsonBuffer.parseObject(payload);
+    JsonObject& received = jsonBuffer.parseObject((char*)payload);
     updateSettings(received);
   }
 }
@@ -110,15 +123,16 @@ void setup() {
 
   init_interface();
 
+  client.setServer(MQTT_IP, 1883);
+  client.setCallback(messageReceived);
+
   Bridge.begin();
-  client.begin("192.168.1.188", 1883, net);
-  connect();
 }
 
 void loop() {
   // protect from disconnect
   if(!client.connected()) {
-    connect();
+    reconnect();
   }
 
   client.loop();
