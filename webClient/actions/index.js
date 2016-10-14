@@ -4,7 +4,7 @@ export const pumpAction = (blockId, value) => {
     data: {
       blockId,
       param: 'pump',
-      value
+      value: value === 'on' ? 1 : 0
     }
   };
 };

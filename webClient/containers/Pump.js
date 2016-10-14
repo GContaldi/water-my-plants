@@ -5,7 +5,7 @@ import { pumpAction } from '../actions';
 const propTypes = {
   dispatch: PropTypes.func.isRequired,
   action: PropTypes.string.isRequired,
-  blockId: PropTypes.number.isRequired
+  blockId: PropTypes.string.isRequired
 };
 
 class Pump extends React.Component {

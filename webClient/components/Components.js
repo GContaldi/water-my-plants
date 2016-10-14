@@ -4,8 +4,7 @@ import Component from './Component';
 const propTypes = {
   components: React.PropTypes.arrayOf(
     React.PropTypes.shape(Component.PropTypes)
-  ).isRequired,
-  blockId: React.PropTypes.number.isRequired
+  ).isRequired
 };
 
 class Components extends React.Component {
@@ -14,14 +13,11 @@ class Components extends React.Component {
   render() {
     return (
       <div>
-        <h1>{ `Block ${this.props.blockId}` }</h1>
-        <div>
-          {
-            this.props.components.map((component, index) => {
-              return <Component {...component} key={index} />;
-            })
-          }
-        </div>
+        {
+          this.props.components.map((component, index) => {
+            return <Component {...component} key={index} />;
+          })
+        }
       </div>
     );
   }

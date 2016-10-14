@@ -9,7 +9,7 @@ const propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    blocks: _.groupBy(state.instantReads, (component) => component.groupId)
+    blocks: _.groupBy(state.instantReads, (component) => component.blockId)
   };
 };
 
@@ -17,12 +17,11 @@ class Blocks extends React.Component {
   static get propTypes() { return propTypes; }
 
   render() {
-    debugger;
     return (
       <div>
         {
           _.reduce(this.props.blocks, (blocks, components, blockId) => {
-            blocks.push(<Block components={components} blockId={blockId} key={blockId} />)
+            blocks.push(<Block components={components} blockId={blockId} key={blockId} />);
             return blocks;
           }, [])
         }

@@ -1,10 +1,12 @@
 import React from 'react';
 import Pump from '../containers/Pump';
-import Components from './Components';
+import Component from './Component';
 
 const propTypes = {
-  blockId: React.PropTypes.number.isRequired,
-  components: React.PropTypes.shape(Components.PropTypes).isRequired
+  blockId: React.PropTypes.string.isRequired,
+  components: React.PropTypes.arrayOf(
+    React.PropTypes.shape(Component.PropTypes)
+  ).isRequired
 };
 
 class Block extends React.Component {
@@ -12,10 +14,19 @@ class Block extends React.Component {
 
   render() {
     return (
-      <div>
-        <Components components={this.props.components} />
-        <Pump action="on" blockId={this.props.blockId} />
-        <Pump action="off" blockId={this.props.blockId} />
+      <div data-key={this.props.blockId}>
+        <h1>{ `Block ${this.props.blockId}` }</h1>
+        <div>
+          <div>
+            {
+              this.props.components.map((component, index) => {
+                return <Component {...component} key={index} />;
+              })
+            }
+          </div>
+          <Pump action="on" blockId={this.props.blockId} />
+          <Pump action="off" blockId={this.props.blockId} />
+        </div>
       </div>
     );
   }

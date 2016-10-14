@@ -2,7 +2,7 @@ import React from 'react';
 
 const propTypes = {
   param: React.PropTypes.string.isRequired,
-  value: React.PropTypes.string.isRequired
+  value: React.PropTypes.number.isRequired
 };
 
 class Component extends React.Component {
