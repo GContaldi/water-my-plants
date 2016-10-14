@@ -59,10 +59,9 @@ void messageReceived(String topic, String payload, char * bytes, unsigned int le
     JsonObject& received = jsonBuffer.parseObject(payload);
     const char* param = received["param"];
     const char* value = received["value"];
-    if(param == "pump_in") {
+    if(param == "pump") {
       setupPump(value);
     }
-    Serial.println(payload);
   }
 }
 
