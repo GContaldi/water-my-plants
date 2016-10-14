@@ -6,7 +6,7 @@ BridgeClient net;
 MQTTClient client;
 
 unsigned long lastMillis = 0;
-int humidityAnalogPin = 3;
+int humidityAnalogPin = 0;
 int pumpDigitalPin = 13;
  
 void setup() {
@@ -23,11 +23,8 @@ void connect() {
     Serial.print(".");
     delay(1000);
   }
-
   Serial.println("\nconnected!");
-
-  client.subscribe("arduino/in/pump");
-  // client.unsubscribe("/example");
+  client.subscribe("arduino/in");
 }
 
 void loop() {
@@ -40,41 +37,26 @@ void loop() {
   // publish a message roughly every second.
   if(millis() - lastMillis > 1000) {
     lastMillis = millis();
-    // read humidity and send
-    String messageJson = sendAnalogValue("humidity", humidityAnalogPin);
-    Serial.println(messageJson);
-    client.publish("arduino/out", messageJson);
+    String blockMessageOut = createBlockMessage(1,"humidity", analog);
+    Serial.println(blockMessageOut);
+    client.publish("arduino/out", blockMessageOut);
   }
 }
 
 void messageReceived(String topic, String payload, char * bytes, unsigned int length) {
-  //Serial.print("incoming: ");
-  //Serial.print(topic);
-  //Serial.print(" - ");
-  //Serial.print(payload);
-  Serial.println();
-  if( topic == "arduino/in/pump") {
-    Serial.print(topic);
-    Serial.print(" value: ");
+  if( topic == "arduino/in") {
     Serial.println(payload);
-    if( payload == "OFF") {
-      Serial.println("Turning ON the PUMP");
-      digitalWrite(pumpDigitalPin, HIGH);
-    }
-    if( payload == "ON") {
-      Serial.println("Turning OFF the PUMP");
-      digitalWrite(pumpDigitalPin, LOW);
-    }
   }
 }
 
-String sendAnalogValue(String valueName, int sensorPin) {
-  int value = analogRead(sensorPin);
-  String message = "{'";
-  message += valueName;
-  message += "':";
+String createBlockMessage(int blockId, String param, int value) {
+  //int value = analogRead(blockIdAnalogPin);
+  String message = "{'blockId':";
+  message += blockId;
+  message += ",'param':'";
+  message += param;
+  message += "','value':'";
   message += value;
-  message += "}";
+  message += "'}";
   return message;
 }
-
