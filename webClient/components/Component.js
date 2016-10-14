@@ -1,9 +1,8 @@
 import React from 'react';
 
 const propTypes = {
-  name: React.PropTypes.string.isRequired,
-  value: React.PropTypes.string.isRequired,
-  type: React.PropTypes.string
+  param: React.PropTypes.string.isRequired,
+  value: React.PropTypes.string.isRequired
 };
 
 class Component extends React.Component {
@@ -11,7 +10,7 @@ class Component extends React.Component {
 
   render() {
     return (
-      <div data-key={this.props.key}>{`${this.props.name}: ${this.props.value}`}</div>
+      <div data-key={this.props.key}>{`${this.props.param}: ${this.props.value}`}</div>
     );
   }
 }

@@ -1,10 +1,10 @@
-export const pumpAction = (action) => {
+export const pumpAction = (blockId, value) => {
   return {
     type: 'server/COMMAND',
     data: {
-      name: 'pump',
-      type: 'actuator',
-      value: action
+      blockId,
+      param: 'pump',
+      value
     }
   };
 };

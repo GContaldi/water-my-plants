@@ -4,14 +4,15 @@ import { pumpAction } from '../actions';
 
 const propTypes = {
   dispatch: PropTypes.func.isRequired,
-  action: PropTypes.string.isRequired
+  action: PropTypes.string.isRequired,
+  blockId: PropTypes.number.isRequired
 };
 
 class Pump extends React.Component {
   static get propTypes() { return propTypes; }
 
   handleClick() {
-    this.props.dispatch(pumpAction(this.props.action));
+    this.props.dispatch(pumpAction(this.props.blockId, this.props.action));
   }
 
   render() {

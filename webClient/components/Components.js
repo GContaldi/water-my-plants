@@ -1,11 +1,11 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import Component from './Component';
 
 const propTypes = {
   components: React.PropTypes.arrayOf(
     React.PropTypes.shape(Component.PropTypes)
   ).isRequired,
-  componentsType: PropTypes.string.isRequired
+  blockId: React.PropTypes.number.isRequired
 };
 
 class Components extends React.Component {
@@ -14,7 +14,7 @@ class Components extends React.Component {
   render() {
     return (
       <div>
-        <h1>{ this.props.componentsType }</h1>
+        <h1>{ `Block ${this.props.blockId}` }</h1>
         <div>
           {
             this.props.components.map((component, index) => {

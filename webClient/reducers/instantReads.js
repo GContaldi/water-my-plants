@@ -1,7 +1,12 @@
 import _ from 'underscore';
 
+const isSameComponent = (component1, component2) => {
+  return component1.blockId === component2.blockId &&
+    component1.param === component2.param;
+};
+
 const isComponentPresent = (components = [], data) => {
-  return _.some(components, (component) => { return component.name === data.name; });
+  return _.some(components, (component) => isSameComponent(component, data));
 };
 
 const addComponent = (components = [], newComponent) => {
@@ -12,7 +17,7 @@ const addComponent = (components = [], newComponent) => {
 };
 
 const updateComponent = (component = {}, data) => {
-  if (component.name === data.name) {
+  if (isSameComponent(component, data)) {
     return Object.assign({}, component, { value: data.value });
   }
   return component;
