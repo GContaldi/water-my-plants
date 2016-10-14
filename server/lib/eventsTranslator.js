@@ -1,5 +1,5 @@
 
-const decodeMessage = (message) => {
+export const decodeMessage = (message) => {
   return JSON.parse(message.toString());
 };
 

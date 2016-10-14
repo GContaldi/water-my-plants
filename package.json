@@ -8,9 +8,10 @@
     "build:client": "webpack --config webpack.config.js",
     "build:client:watch": "webpack --config webpack.config.js --watch",
     "build:server": "babel server -d public/server",
-    "start:server": "nodemon server/index.js --exec babel-node",
+    "start:server": "node public/server/index.js",
     "build:html": "cp index.html public",
-    "start": "npm run build:client && npm run build:server && npm run build:html && node public/server/index.js"
+    "start": "npm run build:client && npm run build:server && npm run build:html && npm run start:server",
+    "setup": "npm install && npm start"
   },
   "repository": {
     "type": "git",
@@ -22,8 +23,10 @@
   },
   "license": "MIT",
   "dependencies": {
+    "es6-promise-polyfill": "^1.2.0",
     "express": "^4.14.0",
     "highcharts": "^5.0.0",
+    "mongodb": "^2.2.10",
     "mqtt": "^2.0.1",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
