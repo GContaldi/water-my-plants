@@ -7,7 +7,10 @@
     "lint": "eslint server/* webClient/* webpack.config.js",
     "build:client": "webpack --config webpack.config.js",
     "build:client:watch": "webpack --config webpack.config.js --watch",
-    "start:server": "nodemon server/index.js --exec babel-node"
+    "build:server": "babel server -d public/server",
+    "start:server": "nodemon server/index.js --exec babel-node",
+    "build:html": "cp index.html public",
+    "start": "npm run build:client && npm run build:server && npm run build:html && node public/server/index.js"
   },
   "repository": {
     "type": "git",
@@ -21,6 +24,7 @@
   "dependencies": {
     "express": "^4.14.0",
     "highcharts": "^5.0.0",
+    "mqtt": "^2.0.1",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
     "react-highcharts": "^10.0.0",
