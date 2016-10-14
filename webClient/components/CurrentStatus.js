@@ -1,14 +1,11 @@
 import React from 'react';
-import FilteredComponents from '../containers/FilteredComponents';
-import Pump from '../containers/Pump';
+import Blocks from '../containers/Blocks';
 
 class CurrentStatus extends React.Component {
   render() {
     return (
       <div>
-        <FilteredComponents componentsType="actuator" />
-        <Pump action="on" />
-        <Pump action="off" />
+        <Blocks />
       </div>
     );
   }

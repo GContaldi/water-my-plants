@@ -1,11 +1,10 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import Component from './Component';
 
 const propTypes = {
   components: React.PropTypes.arrayOf(
     React.PropTypes.shape(Component.PropTypes)
-  ).isRequired,
-  componentsType: PropTypes.string.isRequired
+  ).isRequired
 };
 
 class Components extends React.Component {
@@ -14,14 +13,11 @@ class Components extends React.Component {
   render() {
     return (
       <div>
-        <h1>{ this.props.componentsType }</h1>
-        <div>
-          {
-            this.props.components.map((component, index) => {
-              return <Component {...component} key={index} />;
-            })
-          }
-        </div>
+        {
+          this.props.components.map((component, index) => {
+            return <Component {...component} key={index} />;
+          })
+        }
       </div>
     );
   }
