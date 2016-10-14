@@ -7,19 +7,19 @@ import { socketToMqtt, mqttToSocket } from './lib/eventsTranslator';
 export const io = socketIO(http);
 
 io.on('connection', function(socket) {
-  console.log('WebClient connected to SocketIO with id: ' + socket.id);
+  console.log('SocketIO client connected with id: ' + socket.id);
 
   socket.on('action', (action) => {
-    console.log('SocketIO: ' + socket.id);
+    console.log('SocketIO action received from: ' + socket.id);
     // TODO: save in db
     const [topic, payload] = socketToMqtt(action);
     mqttClient.publish(topic, payload);
   });
 
   socket.on('disconnect', () => {
-    console.log('socket: user disconnected');
+    console.log('SocketIO client disconnected with id: ' + socket.id);
     mqttClient.unsubscribe(MQTT_TOPICS);
-    console.log('mqtt client disconnected');
+    console.log('MQTT client disconnected');
   });
 
   mqttClient.on('message', function(topic, message) {
