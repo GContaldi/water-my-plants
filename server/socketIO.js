@@ -3,7 +3,6 @@ import _ from 'underscore';
 import { http } from './express';
 import mqttClient from './mqttClient';
 import mongoClient from './mongoClient';
-// import mongoClient from './mongoClient';
 import { socketToMqtt, mqttToSocket, decodeMessage } from './lib/eventsTranslator';
 
 export const io = socketIO(http);
@@ -15,7 +14,7 @@ io.on('connection', function(socket) {
     console.log('SocketIO action received from: ' + socket.id, action);
     mongoClient.insertDocument('action_frontend', action).then(
       (result) => console.log('MongoDB - Action saved in DB', result),
-      (reason) => console.log('MongoDB - Action could not be saved', reason),
+      (reason) => console.log('MongoDB - Action could not be saved', reason)
     );
 
     const [topic, payload] = socketToMqtt(action);
@@ -28,13 +27,15 @@ io.on('connection', function(socket) {
 
   mqttClient.on('message', function(topic, message) {
     console.log('MQTT client message received:', topic, decodeMessage(message));
-    const messageDecode = decodeMessage(message);
-    messageDecode.datetime = new Date();
-    const collection = 'raw_data';
+    const decodedMessage = Object.assign(
+      {},
+      decodeMessage(message),
+      { datetime: new Date().toISOString() }
+    );
 
-    mongoClient.insertDocument(collection, messageDecode).then(
+    mongoClient.insertDocument('mqtt_messages', decodedMessage).then(
       (result) => console.log('MongoDB - Action saved in DB', result),
-      (reason) => console.log('MongoDB - Action could not be saved', reason),
+      (reason) => console.log('MongoDB - Action could not be saved', reason)
     );
 
     const action = mqttToSocket(topic, message);

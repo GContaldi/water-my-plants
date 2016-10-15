@@ -14,54 +14,63 @@ MongoClient.connect(url, function(err, db) {  // eslint-disable-line new-cap
   dbInstance = db;
 });
 
-const getDocuments = () => {
-  return dbInstance ? [] : dbInstance.collection('documents');
-};
-
-const insertDocuments = (collection, data) => {
+const getCollection = (collectionName) => {
   return new Promise((resolve, reject) => {
-    const documentType = dbInstance.collection(collection);
-
-    documentType.insertMany(data, (err, result) => {
-      if (err === null) {
-        resolve(result);
-      } else {
-        reject(err);
-      }
-    });
-  });
-};
-
-const insertDocument = (collection, data) => {
-  return new Promise((resolve, reject) => {
-    const documentType = dbInstance.collection(collection);
-
-    documentType.insert(data, (err, result) => {
-      if (err === null) {
-        resolve(result);
-      } else {
-        reject(err);
-      }
-    });
-  });
-};
-
-const findDocuments = (data) => {
-  return new Promise((resolve, reject) => {
-    const documents = getDocuments();
-
-    if (documents === null) {
-      reject('no documents');
+    if (dbInstance === null) {
+      reject('no Mongo client instance');
     }
 
-    documents.find(data).toArray((err, result) => {
-      if (err === null) {
-        resolve(result);
-      } else {
-        reject(err);
-      }
-    });
+    const collection = dbInstance.collection(collectionName);
+    resolve(collection);
   });
 };
 
-export default { getDocuments, insertDocument, insertDocuments, findDocuments };
+const insertDocuments = (collectionName, data) => {
+  return new Promise((resolve, reject) => {
+    const insert = (collection) => {
+      collection.insertMany(data, (err, result) => {
+        if (err === null) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      });
+    };
+
+    getCollection(collectionName).then(insert, reject);
+  });
+};
+
+const insertDocument = (collectionName, data) => {
+  return new Promise((resolve, reject) => {
+    const insert = (collection) => {
+      collection.insert(data, (err, result) => {
+        if (err === null) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      });
+    };
+
+    getCollection(collectionName).then(insert, reject);
+  });
+};
+
+const findDocuments = (collectionName, data) => {
+  return new Promise((resolve, reject) => {
+    const find = (collection) => {
+      collection.find(data).toArray((err, result) => {
+        if (err === null) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      });
+    };
+
+    getCollection(collectionName).then(find, reject);
+  });
+};
+
+export default { getCollection, insertDocument, insertDocuments, findDocuments };
